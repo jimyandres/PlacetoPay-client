@@ -11,6 +11,10 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+use App\Http\Controllers\PaymentController;
+
+Route::get('/', 'PaymentController@index');
+
+Route::get('/start', function () {
+    return view('start');
 });
