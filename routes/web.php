@@ -13,8 +13,12 @@
 
 use App\Http\Controllers\PaymentController;
 
+// Presenta la página de bienvenida
 Route::get('/', 'PaymentController@index');
 
-Route::get('/start', function () {
-    return view('start');
-});
+// Presenta la página de inicio (paso 1.Listar Bancos)
+Route::get('/start', 'PaymentController@start');
+
+// Se obtiene al banco (y tipo de cuenta) seleccionada en la página de
+// inicio, redirecciona a la página de verificación si el banco seleccionado existe
+Route::post('/start', 'PaymentController@verification');
