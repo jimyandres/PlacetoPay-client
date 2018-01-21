@@ -91,7 +91,7 @@
                 </div>
 
                 <div class="links">
-                    <a href={{url('/start')}}>INICIAR</a>
+                    <a href={{url('/payment')}}>INICIAR</a>
                 </div>
             </div>
         </div>
