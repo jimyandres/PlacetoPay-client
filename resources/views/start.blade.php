@@ -21,7 +21,6 @@
         <select name="accountCode">
             @foreach($accounts as $account)
                 <option value="{{ $account['accountCode'] }}">{{ $account['accountType'] }}</option>
-                <li></li>
             @endforeach
         </select>
         <div>
