@@ -81,7 +81,7 @@
         </div>
 
 
-        <form action="{{ url('/payment') }}" method="POST">
+        <form action="{{ route('payment::start') }}" method="POST">
             {{ csrf_field() }}
 
             <div>
