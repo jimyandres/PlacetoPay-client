@@ -53,16 +53,6 @@
             font-size: 42px;
         }
 
-        .links > a {
-            color: #636b6f;
-            padding: 0 25px;
-            font-size: 22px;
-            font-weight: 600;
-            letter-spacing: .1rem;
-            text-decoration: none;
-            text-transform: uppercase;
-        }
-
         .m-b-md {
             margin-bottom: 40px;
         }
@@ -91,9 +81,38 @@
         </div>
 
 
-        <div class="links">
-            <a href={{url('/start')}}>INICIAR</a>
-        </div>
+        <form action="{{ url('/payment') }}" method="POST">
+            {{ csrf_field() }}
+
+            <div>
+                <p for="account">Indique el tipo de cuenta con la cual realizará el pago:</p>
+            </div>
+            <select name="accountCode">
+                @foreach($accounts as $account)
+                    <option value="{{ $account['accountCode'] }}">{{ $account['accountType'] }}</option>
+                    <li></li>
+                @endforeach
+            </select>
+            <div>
+                <p for="bank">Seleccione la entidad con la que desea realizar el pago:</p>
+            </div>
+            <div>
+                <select name="bankCode">
+                    @foreach($ArrayOfBank as $bank)
+'                        <option {{ $bank->bankCode == '1022'? 'selected': '' }} value="{{ $bank->bankCode }}">{{ $bank->bankName }}</option>
+                        <li></li>
+                    @endforeach
+                </select>
+            </div>
+
+            <br />
+
+            <div>
+                <button type="submit">Continuar</button>
+            </div>
+        </form>
+
+
     </div>
 </div>
 </body>
