@@ -70,16 +70,6 @@
     </head>
     <body>
         <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
-                        <a href="{{ route('register') }}">Register</a>
-                    @endauth
-                </div>
-            @endif
 
             <div class="content">
                 <div class="title">
@@ -91,7 +81,7 @@
                 </div>
 
                 <div class="links">
-                    <a href={{url('/payment')}}>INICIAR</a>
+                    <a href={{route('payment::start')}}>INICIAR</a>
                 </div>
             </div>
         </div>
