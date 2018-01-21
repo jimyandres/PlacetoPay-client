@@ -110,6 +110,23 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | PlacetoPay WS credentials
+    |--------------------------------------------------------------------------
+    |
+    | Here you may configure the credentials for the PlacetoPay Web Service.
+    |
+    */
+
+    'ws_login' => env('PLACETOPAY_LOGIN'),
+
+    'ws_tranKey' => env('PLACETOPAY_TRANKEY'),
+
+    'ws_wsdl' => env('PLACETOPAY_WSDL'),
+
+    'ws_location' => env('PLACETOPAY_LOCATION'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Logging Configuration
     |--------------------------------------------------------------------------
     |
