@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use SoapClient;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * @property SoapClient client
@@ -20,8 +21,8 @@ class PaymentController extends Controller
      */
     public function __construct()
     {
-        $this->client = new SoapClient(env('PLACETOPAY_WSDL'), array('trace' => true));
-        $this->client->__setLocation(env('PLACETOPAY_LOCATION'));
+        $this->client = new SoapClient(config('app.ws_wsdl'), array('trace' => true));
+        $this->client->__setLocation(config('app.ws_location'));
     }
 
     /**
@@ -40,6 +41,8 @@ class PaymentController extends Controller
     }
 
     /**
+     * Representa la página de Inicio del proceso de pago
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function startView ()
@@ -49,11 +52,23 @@ class PaymentController extends Controller
          * @var String $title */
         $title = 'Start - Place to Pay';
 
-        /** @var ArrayOfBank $resp */
-        $resp = $this->client->__call('getBankList', self::authentication());
+        if (!Cache::has('ArrayOfBank')) {
 
-        /** @var item $resp */
-        $resp = $resp->getBankListResult->item;
+            /** @var ArrayOfBank $resp */
+            $resp = $this->client->__call('getBankList', self::authentication());
+
+            /** @var item ArrayOfBank */
+            $ArrayOfBank = $resp->getBankListResult->item;
+
+            $expiresAt = now()->addDay(1);
+
+            Cache::put('ArrayOfBank', $ArrayOfBank, $expiresAt);
+
+        }
+        else
+        {
+            $ArrayOfBank = Cache::get('ArrayOfBank');
+        }
 
         /**
          * Definición de tipos de cuenta para la vista
@@ -69,9 +84,27 @@ class PaymentController extends Controller
             ),
         );
 
-        return view('start',compact('title', 'resp', 'accounts'));
+        return view('start',compact('title', 'ArrayOfBank', 'accounts'));
     }
 
+    /**
+     * Recibe los datos obtenidos en la página de inicio y los almacena en Cache:
+     * accountCode, bankCode
+     *
+     * @return \Illuminate\Contracts\Routing\UrlGenerator|string
+     */
+    public function startRequest ()
+    {
+        $accountCode = \request('accountCode');
+        $bankCode = \request('bankCode');
+
+        $expiresAt = now()->addHour(1);
+
+        Cache::put('accountCode', $accountCode, $expiresAt);
+        Cache::put('bankCode', $bankCode, $expiresAt);
+
+        return url('/payment/verification');
+    }
 
     /**
      *
@@ -80,8 +113,8 @@ class PaymentController extends Controller
      */
     private function authentication ()
     {
-        $login = env('PLACETOPAY_LOGIN');
-        $tranKey = env('PLACETOPAY_TRANKEY');
+        $login = config('app.ws_login');
+        $tranKey = config('app.ws_tranKey');
 
 //        Generación de la semilla
         $seed = date('c');
