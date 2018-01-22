@@ -34,6 +34,10 @@
             </select>
         </div>
 
+        <div>
+            <strong>Se asume que el "pagador" y el "comprador" son la misma persona:</strong>
+        </div>
+
         <div class="row">
             <div class="column right">
                 <span>Tipo de Identificación:</span>

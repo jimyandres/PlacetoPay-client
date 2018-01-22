@@ -101,10 +101,13 @@
                 text-align: left;
             }
 
+            strong {
+                font-weight: 600;
+            }
         </style>
     </head>
     <body>
-        <div class="">
+        <div class="@yield('custom_style')">
             <div class="content">
 
                 @yield('content')
