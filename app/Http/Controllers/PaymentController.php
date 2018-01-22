@@ -129,34 +129,6 @@ class PaymentController extends Controller
         return redirect()->route('payment::start');
     }
 
-    /**
-     * Representa la página de verficiación de datos del pagador
-     * @return string
-     */
-    public function verificationView ()
-    {
-        /**
-         * Titulo que tendrá la vista
-         * @var String $title */
-        $title = 'Verification - Place to Pay';
-
-        /**
-         * Definición de tipos de cuenta para la vista
-         * @var array $accounts */
-        $accounts = array(
-            array(
-                'accountCode' => 0,
-                'accountType' => 'Persona natural',
-            ),
-            array(
-                'accountCode' => 1,
-                'accountType' => 'Persona jurídica',
-            ),
-        );
-
-        return view('verification', compact('title', 'accounts'));
-    }
-
     public function result ()
     {
         $arguments = array(
