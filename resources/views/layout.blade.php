@@ -21,9 +21,9 @@
                 margin: 0;
             }
 
-            /*div {*/
-                /*!*padding: 5px 0;*!*/
-            /*}*/
+            div {
+                padding: 5px 0;
+            }
 
             .full-height {
                 height: 100vh;
@@ -72,10 +72,39 @@
                 top: 18px;
             }
 
+            .links > a {
+                color: #636b6f;
+                padding: 0 25px;
+                font-size: 22px;
+                font-weight: 600;
+                letter-spacing: .1rem;
+                text-decoration: none;
+                text-transform: uppercase;
+            }
+
+            .row {
+                display: table;
+                width: 100%;
+                table-layout: fixed;
+                border-spacing: 10px;
+            }
+
+            .column {
+                display: table-cell;
+            }
+
+            .right {
+                text-align: right;
+            }
+
+            .left {
+                text-align: left;
+            }
+
         </style>
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
+        <div class="">
             <div class="content">
 
                 @yield('content')
