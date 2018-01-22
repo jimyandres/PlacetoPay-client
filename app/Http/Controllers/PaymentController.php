@@ -94,7 +94,7 @@ class PaymentController extends Controller
      * Recibe los datos obtenidos en la página de inicio y los almacena en Cache:
      * accountCode, bankCode
      *
-     * @return \Illuminate\Contracts\Routing\UrlGenerator|string
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function startRequest ()
     {
@@ -129,8 +129,18 @@ class PaymentController extends Controller
         return redirect()->route('payment::start');
     }
 
+    /**
+     * Representa la visualización del historial de transacciones en el último día
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function result ()
     {
+        /**
+         * Titulo que tendrá la vista
+         * @var String $title */
+        $title = 'Result - Place to Pay';
+
         $arguments = array(
             'auth' => self::authentication(),
             'transactionID' => Cache::get('transactionID'),
@@ -140,14 +150,35 @@ class PaymentController extends Controller
 
         $resp = $resp->getTransactionInformationResult;
 
-        if ($resp->transactionState == "PENDING")
+        /**
+         * Verificar si en Cache NO se tiene historial de transacciones
+         */
+        if (!Cache::has('TransactionHistory'))
         {
-            route('payment::result_payment');
+            /** Se almacena en Cache (por un dia) el registro de las transacciones */
+            $expiresAt = now()->addDay(1);
+            $TransactionHistory = array((string)$resp->transactionID => $resp);
+            Cache::put('TransactionHistory', $TransactionHistory,$expiresAt);
+        }
+        else
+        {
+            $TransactionHistory = Cache::get('TransactionHistory');
 
-            dd ("result with Schedule" , date('c') , $resp);
+
+            if (!array_key_exists((string)$resp->transactionID, $TransactionHistory))
+            {
+                /** Se almacena en Cache (por un dia) el registro de las transacciones */
+                $new_transaction = array((string)$resp->transactionID => $resp);
+                $TransactionHistory = $TransactionHistory + $new_transaction;
+                $expiresAt = now()->addDay(1);
+                Cache::put('TransactionHistory', $TransactionHistory,$expiresAt);
+            }
         }
 
-        dd ("normal result" , $resp);
+        /** Se obtiene el historial de transacciones */
+        $TransactionHistory = Cache::get('TransactionHistory');
+
+        return view('result', compact('title','TransactionHistory'));
 
     }
 
@@ -175,7 +206,15 @@ class PaymentController extends Controller
         return $auth;
     }
 
-    private function transaction ($bankInterface,$bankCode,$payer)
+    /**
+     * Método para crear un objeto transaction con valores ficticios
+     *
+     * @param $bankInterface
+     * @param $bankCode
+     * @param $payer
+     * @return array
+     */
+    private function transaction ($bankInterface, $bankCode, $payer)
     {
         $transaction = array(
             'bankCode' => $bankCode,
@@ -198,6 +237,12 @@ class PaymentController extends Controller
         return $transaction;
     }
 
+    /**
+     * Método para crear un objeto person según los datos proporcionados por el usuario
+     *
+     * @param Request $request
+     * @return array
+     */
     private function person (Request $request)
     {
         $person = array(
