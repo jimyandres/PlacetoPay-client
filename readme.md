@@ -3,7 +3,7 @@
 This project is a Soap Client that tests the Web Services of the Place to Pay PSE.
 
 The Soap Client establishes a connection that allows a basic pay process. At the end of the process the user can see the
-transaction result and the others stored in cache.
+transaction result and the others previous transactions stored in cache.
 
 *Note: The "die-time" of the Transactions History is set to 1 day. If at that time none transaction is made, the history will be deleted from the cache.*  
 
