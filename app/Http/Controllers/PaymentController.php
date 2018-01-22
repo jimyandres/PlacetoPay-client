@@ -146,6 +146,12 @@ class PaymentController extends Controller
             'transactionID' => Cache::get('transactionID'),
         );
 
+        if (is_null($arguments['transactionID']))
+        {
+            $TransactionHistory = null;
+            return view('result', compact('title', 'TransactionHistory'));
+        }
+
         $resp = $this->client->__call('getTransactionInformation', array($arguments));
 
         $resp = $resp->getTransactionInformationResult;
