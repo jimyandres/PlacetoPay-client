@@ -306,22 +306,4 @@ class PaymentController extends Controller
         'documentType' => 'Social Security Number',
         )
     );
-
-    /**
-     *
-     * Temporal method to get the web service info
-     *
-     * TODO
-     * Delete function
-     *
-     * @param $type
-     */
-    public function webServiceInfo ($type)
-    {
-        if (!$type)
-            dd($this->client->__getTypes());
-        else
-            dd($this->client->__getFunctions());
-    }
-
 }

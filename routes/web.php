@@ -50,6 +50,3 @@ Route::group(['as' => 'payment::', 'prefix' => 'payment'], function () {
         'uses' => 'PaymentController@result'
     ]);
 });
-
-// Rutas temporales
-Route::get('/{type}', 'PaymentController@webServiceInfo');
