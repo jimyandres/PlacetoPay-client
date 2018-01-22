@@ -34,7 +34,7 @@ Route::group(['as' => 'payment::', 'prefix' => 'payment'], function () {
     ]);
 
     /*
-     * Se obtiene al banco y tipo de cuenta seleccionada en la página de
+     * Se obtiene datos requeridos en la página de
      * inicio, redirecciona a la página de verificación
      */
     Route::post('', [
